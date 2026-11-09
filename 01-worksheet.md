@@ -187,34 +187,170 @@ QUICK PROBLEM CARD #3
 
 ---
 
-# 🏗️ Phase 3 — DEEP-DIVE (Nhóm, 85 min)
+# 🏗️ Phase 3 — DEEP-DIVE: XANH SM AIRPORT PICK-UP ASSISTANT
 
 ## 3.1. Current-State Workflow Mapping (25 min)
-**Vẽ quy trình hiện tại lên bảng/giấy A3.** Sử dụng các ký hiệu:
-* 🔴 **Bottleneck:** Bước gây tắc nghẽn, tốn thời gian, hoặc sai sót nhiều nhất.
-* 🔄 **Handoff:** Điểm chuyển giao thông tin giữa người và hệ thống, hoặc giữa các bộ phận.
-* Ghi rõ thời gian vận hành trung bình: **Tổng cộng = ____ phút/lượt**.
+
+**Quy trình hiện tại (As-Is):**
+
+```text
+[1] Khách đặt xe Xanh SM tại sân bay
+              |
+              | 🔄 Handoff: Ứng dụng chuyển thông tin chuyến đi
+              v
+[2] Khách tìm khu vực đón Xanh SM
+              |
+              | 🔴 BOTTLENECK (5–7 phút)
+              | Khó xác định đúng khu vực đón,
+              | nhầm lẫn giữa các hãng vận tải
+              v
+[3] Khách liên hệ tài xế nếu không tìm được
+              |
+              | 🔴 BOTTLENECK (phát sinh 2–3 phút)
+              | Hai bên phải trao đổi để xác nhận vị trí
+              v
+[4] Khách gặp tài xế và lên xe
+              |
+              v
+          [HOÀN THÀNH]
+```
+
+**Các điểm Handoff (🔄):**
+- Hành khách → Ứng dụng Xanh SM: Gửi yêu cầu đặt xe và thông tin điểm đón.
+- Ứng dụng Xanh SM → Tài xế: Chuyển thông tin chuyến đi.
+- Hành khách ↔ Tài xế: Gọi điện hoặc nhắn tin để xác nhận vị trí khi không tìm được điểm đón.
+
+**Thời gian vận hành trung bình (ước tính):**
+
+| Bước | Công việc | Thời gian |
+|---|---|---:|
+| 1 | Đặt xe | 1–2 phút |
+| 2 | Tìm khu vực đón | 5–7 phút |
+| 3 | Liên hệ tài xế (nếu cần) | 2–3 phút |
+| 4 | Gặp tài xế và lên xe | 1–2 phút |
+| **Tổng cộng** | | **9–14 phút/lượt** |
+
+*Lưu ý: Bước 3 chỉ phát sinh khi hành khách không tìm được khu vực đón. Các thời gian trên là giả định ban đầu, cần khảo sát thực tế để xác nhận.*
+
+---
 
 ## 3.2. Problem Statement (6-field) & Metrics (15 min)
-Điền đầy đủ 6 trường thông tin của bài toán:
 
 | Field | Nội dung chi tiết |
 |---|---|
-| **1. Actor / Operator** | Ai đang thực hiện tác vụ hằng ngày? |
-| **2. Current Workflow** | Mô tả tóm tắt quy trình thủ công hiện tại và công cụ sử dụng. |
-| **3. Bottleneck** | Bước nào chậm, lỗi, hoặc cần xử lý ngôn ngữ tự động nhiều nhất? |
-| **4. Business Impact** | Tổn thất thực tế đo bằng thời gian, chi phí, hoặc SLA của Vingroup. |
-| **5. Success Metric** | AI giải quyết được thì đạt ngưỡng số mấy? (Ví dụ: *"85% vé được phân loại dưới 10s"*). |
-| **6. Operational Boundary** | AI được phép làm gì, TUYỆT ĐỐI không được làm gì, điểm nào cần duyệt? |
+| **1. Actor / Operator** | Hành khách đặt xe Xanh SM tại sân bay và tài xế Xanh SM. Hành khách tìm khu vực đón; tài xế hỗ trợ xác nhận và hướng dẫn khi hai bên không tìm thấy nhau. |
+| **2. Current Workflow** | Khách đặt xe trên ứng dụng Xanh SM → tìm khu vực đón theo biển chỉ dẫn → liên hệ tài xế nếu không xác định được vị trí → gặp tài xế và lên xe. Công cụ sử dụng gồm ứng dụng đặt xe, bản đồ và điện thoại/tin nhắn. |
+| **3. Bottleneck** | Bước 2–3: Tìm khu vực đón và liên hệ tài xế. Hành khách khó phân biệt khu vực đón của các hãng vận tải, thiếu hướng dẫn trực quan và phải liên hệ tài xế để xác nhận vị trí. |
+| **4. Business Impact** | Giả sử có 500 chuyến/ngày, mỗi chuyến tiết kiệm 3–4 phút, tổng thời gian tiết kiệm khoảng 25–33,3 giờ/ngày. Với chi phí thời gian giả định 60.000 VNĐ/giờ, giá trị thời gian tương đương 1,5–2 triệu VNĐ/ngày. Ngoài ra, giảm thời gian tài xế chờ, số cuộc gọi hỗ trợ và nguy cơ hủy chuyến do không gặp được nhau. |
+| **5. Success Metric** | (1) Giảm thời gian tìm điểm đón từ 5–7 phút xuống 2–3 phút/lượt, tương đương giảm 57–71%. (2) Giảm ≥ 50% số cuộc gọi giữa hành khách và tài xế liên quan đến tìm điểm đón. (3) ≥ 90% hành khách xác định đúng khu vực đón ngay lần đầu. |
+| **6. Operational Boundary** | AI được phép tra cứu điểm đón chính thức, giải thích đường đi, hiển thị bản đồ và hướng dẫn hành khách dựa trên dữ liệu đã xác minh. AI tuyệt đối không được tự tạo tọa độ, khẳng định vị trí chưa xác minh, tự ý thay đổi điểm đón hoặc hủy chuyến. Khi thiếu dữ liệu hoặc không đủ độ tin cậy, AI phải chuyển sang hướng dẫn chính thức hoặc đề xuất liên hệ tài xế/nhân viên hỗ trợ. |
 
-## 3.3. Future-State Flow & AI Fit (25 min)
-* **Xác định mức AI Fit (AI-Fit Matrix):** Giải pháp thuộc nhóm nào? [ ] Rule / State-Machine [ ] LLM Feature [ ] Agentic Loop.
-* **Vẽ Future-State Flow:** Đánh dấu rõ:
-  * 🔵 **AI Step:** Tác vụ LLM xử lý.
-  * 🟢 **Human Step (HITL):** Bước con người phê duyệt/review (Human-in-the-loop).
-  * ↩️ **Fallback:** Kế hoạch dự phòng khi LLM trả về kết quả lỗi hoặc không tự tin.
+### Success Metrics theo 4 nhóm
+
+| Nhóm | Metric | Target |
+|---|---|---:|
+| **Feasibility** | Tỷ lệ sân bay trong phạm vi MVP có dữ liệu điểm đón được xác minh | ≥ 80% |
+| | Tỷ lệ yêu cầu có đủ thông tin để đưa ra hướng dẫn | ≥ 95% |
+| **Financial Impact** | Giá trị thời gian tiết kiệm với giả định 500 chuyến/ngày | 1,5–2 triệu VNĐ/ngày |
+| | Giảm chi phí hỗ trợ liên quan đến tìm điểm đón | ≥ 30% |
+| **Operational Efficiency** | Tỷ lệ hành khách xác định đúng điểm đón ngay lần đầu | ≥ 90% |
+| | Giảm số cuộc gọi giữa tài xế và hành khách để tìm điểm đón | ≥ 50% |
+| **Time Reduction** | Thời gian tìm điểm đón | Từ 5–7 phút xuống 2–3 phút |
+| | Tỷ lệ cắt giảm thời gian | **57–71%** |
+
+*Các con số là mục tiêu đề xuất để kiểm chứng, không phải kết quả vận hành thực tế của Xanh SM. Giá trị thời gian tiết kiệm chưa đồng nghĩa với lợi nhuận thực tế.*
 
 ---
+
+## 3.3. Future-State Flow & AI Fit (25 min)
+
+### A. AI-Fit Matrix
+
+**Lựa chọn:**
+- [x] Rule / State-Machine
+- [x] LLM Feature
+- [ ] Agentic Loop
+
+**Giải thích:**
+
+- **Rule / State-Machine:** Tra cứu điểm đón chính thức dựa trên sân bay, nhà ga, khu vực và thông tin chuyến đi. Dữ liệu vị trí được quản lý trong database.
+- **LLM Feature:** Hiểu câu hỏi tự nhiên của hành khách, giải thích hướng dẫn và trả lời các câu hỏi như: "Tôi đang ở cửa ra số 3, phải đi đâu để gặp tài xế?".
+- **Agentic Loop:** Chưa cần thiết trong MVP vì hệ thống chủ yếu tra cứu và hướng dẫn, không cần tự chủ thực hiện chuỗi hành động phức tạp.
+
+**Đề xuất:** Kết hợp Rule + LLM Feature. Rule đảm bảo tính chính xác của dữ liệu điểm đón; LLM giúp giao tiếp tự nhiên và cá nhân hóa hướng dẫn.
+
+### B. Future-State Flow (To-Be)
+
+```text
+[1] Khách đặt xe Xanh SM tại sân bay
+              |
+              v
+[2] Backend nhận thông tin chuyến đi,
+    sân bay, nhà ga và điểm đón
+              |
+              v
+[3] 🔵 RULE ENGINE
+    Tra cứu database điểm đón chính thức
+    theo sân bay và nhà ga
+              |
+              v
+[4] 🔵 LLM FEATURE
+    Phân tích câu hỏi và thông tin vị trí
+    do hành khách cung cấp
+    Tạo hướng dẫn dựa trên dữ liệu đã xác minh
+              |
+              v
+[5] 🔵 SYSTEM
+    Hiển thị bản đồ, vị trí đón,
+    biển chỉ dẫn và đường đi bộ
+              |
+              v
+[6] 🟢 HUMAN STEP (HITL)
+    Hành khách xác nhận đã tìm được
+    đúng khu vực đón
+              |
+              v
+[7] Gặp tài xế và lên xe
+              |
+              v
+          [HOÀN THÀNH]
+```
+
+**Fallback (↩️):**
+
+Nếu LLM không hiểu câu hỏi, thiếu thông tin hoặc không đủ độ tin cậy:
+
+1. Không tự tạo hoặc suy đoán vị trí đón.
+2. Hiển thị hướng dẫn và bản đồ điểm đón chính thức đã được xác minh.
+3. Đề nghị hành khách chọn lại nhà ga hoặc cung cấp vị trí hiện tại.
+4. Cung cấp tùy chọn gọi điện/nhắn tin cho tài xế.
+5. Nếu vẫn không giải quyết được, chuyển sang nhân viên hỗ trợ.
+
+### C. Operational Boundaries
+
+| AI được phép làm | AI tuyệt đối không được làm |
+|---|---|
+| Tra cứu điểm đón chính thức | Tự tạo tọa độ hoặc điểm đón không tồn tại |
+| Giải thích đường đi bộ | Hướng dẫn khách đi vào khu vực hạn chế |
+| Trả lời câu hỏi về nhà ga và biển chỉ dẫn | Khẳng định vị trí chưa xác minh là chính xác |
+| Gợi ý liên hệ tài xế | Tự ý thay đổi điểm đón hoặc hủy chuyến |
+| Hỗ trợ nhiều ngôn ngữ | Chia sẻ thông tin chuyến đi cho người không có quyền truy cập |
+
+---
+
+### Kết luận Phase 3
+
+**Quyết định: GO – Tiếp tục xây dựng Prototype ở Phase 4.**
+
+**Lý do:**
+1. Pain point rõ ràng, tập trung vào việc tìm khu vực đón xe tại sân bay.
+2. Có thể đo lường trực tiếp hiệu quả qua thời gian tìm điểm đón và số cuộc gọi giữa hành khách với tài xế.
+3. Có thể triển khai MVP bằng Rule + LLM Feature, không cần Agentic AI phức tạp.
+4. Có thể thử nghiệm tại một sân bay trước khi mở rộng.
+
+**Giả thuyết cần kiểm chứng ở Phase 4:**
+
+Nếu cung cấp hướng dẫn điểm đón cá nhân hóa dựa trên sân bay, nhà ga và vị trí hành khách, hệ thống có thể giảm ít nhất 50% thời gian tìm điểm đón và giảm ít nhất 50% số cuộc gọi hỗ trợ giữa hành khách và tài xế.
 
 # 💻 Phase 4 — TECHNICAL PROMPT PROTOTYPE (Nhóm, 30 min)
 
