@@ -9,6 +9,8 @@ Personally, mình sẽ chọn topic 1 của problem card bản thân.
 * 🔄 **Handoff:** Điểm chuyển giao thông tin giữa người và hệ thống, hoặc giữa các bộ phận.
 * Ghi rõ thời gian vận hành trung bình: **Tổng cộng = ____ phút/lượt**.
 
+![Workflow](04-workflow-diagram.png)
+
 ## 3.2. Problem Statement (6-field) & Metrics (15 min)
 Điền đầy đủ 6 trường thông tin của bài toán:
 
@@ -47,6 +49,7 @@ Personally, mình sẽ chọn topic 1 của problem card bản thân.
   * ↩️ **Fallback:** Kế hoạch dự phòng khi LLM trả về kết quả lỗi hoặc không tự tin.
 
 (Gửi 1 future-state flow thông qua PNG)
+![Future-State Flow](future-state-workflow.png)
 
 
 ### Operational Boundaries
