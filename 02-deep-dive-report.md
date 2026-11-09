@@ -19,22 +19,6 @@ Phạm vi: hỗ trợ nhân viên tiếp nhận phản ánh tiếng Việt dạn
 
 Bottleneck là bước 2–4: **9 phút** để diễn giải ngôn ngữ tự do, hỏi lại và chọn bộ phận. Một phản ánh có cả đèn hỏng và nước rò dễ bị ghi thành một đầu việc. Handoff quan trọng: cư dân → tiếp nhận; tiếp nhận ↔ cư dân khi hỏi bổ sung; tiếp nhận → bộ phận kỹ thuật. Nếu kỹ thuật trả phiếu vì thiếu thông tin, quy trình quay lại bước 3, phát sinh thời gian ngoài baseline trên.
 
-```mermaid
-flowchart TD
-    R[Cư dân gửi phản ánh] -->|Handoff 1| A[1. Tiếp nhận: 0,5 phút]
-    A --> B[2. Đọc và tìm thông tin thiếu: 2 phút]
-    B --> C[3. Hỏi bổ sung: 4 phút thao tác]
-    C -->|Handoff 2: hỏi và nhận trả lời cư dân| D{Đủ thông tin?}
-    D -->|Chưa đủ| C
-    D -->|Đủ| E[4. Tách việc, phân loại, chuyển: 3 phút]
-    E -->|Handoff 3: tiếp nhận sang kỹ thuật| F[5. Ghi phiếu và phản hồi: 0,5 phút]
-    F --> G[Kỹ thuật tiếp nhận; sửa chữa ngoài scope]
-    classDef bottleneck fill:#fee2e2,stroke:#dc2626
-    class B,C,E bottleneck
-```
-
-Tổng 10 phút áp dụng cho một lượt xử lý giả định; số vòng hỏi lại và thời gian chờ phải được log riêng khi đo thật.
-
 ## 3.2. Problem Statement (6-field) & Metrics
 
 | Field | Nội dung chi tiết |
