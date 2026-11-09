@@ -6,27 +6,6 @@
 * 🔄 **Handoff:** Điểm chuyển giao thông tin giữa người và hệ thống, hoặc giữa các bộ phận.
 * Ghi rõ thời gian vận hành trung bình: **Tổng cộng = ____ phút/lượt**.
 
-Sơ đồ quy trình hiện tại 
-┌──────────────┐     ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
-│ Bước 1       │     │ Bước 2       │     │ Bước 3       │     │ Bước 4       │
-│ Thu thập     │ ──→ │ Xếp lịch thủ │ ──→ │ Rà soát chéo │ ──→ │ Ban hành TKB │
-│ danh sách &  │     │ công trên    │     │ tìm xung đột │     │ & xử lý khiếu│
-│ yêu cầu GV   │     │ file Excel   │     │ (giờ, phòng) │     │ nại đổi lịch │
-└──────────────┘     └──────────────┘     └──────────────┘     └──────────────┘
-       │                    │                    │                    │        
-       │ Ai: Giáo vụ        │ Ai: Giáo vụ        │ Ai: Giáo vụ        │ Ai: Giáo vụ
-       │ ⏱ 2-3 ngày        │ ⏱ 5-7 ngày         │ ⏱ 2-3 ngày        │ ⏱ 1-2 ngày
-       │                    │                    │                    │        
-       ▼                    ▼                    ▼                    ▼        
-  🔄 Handoff:          🔴 Bottleneck:       🔴 Bottleneck:       🔄 Handoff:   
-  Giảng viên gửi       Nhồi nhét thủ        Dò tìm bằng          Gửi lịch cho  
-  nguyện vọng cho      công hàng ngàn       mắt rất dễ           SV và GV toàn 
-  Giáo vụ.             biến số.             sai sót.             trường.
-
-⏱ Tổng thời gian vận hành trung bình: 7 - 14 ngày/kỳ học.
-🔴 Bottleneck (Điểm nghẽn): Nằm ở Bước 2 và Bước 3. Việc ghép nối hàng ngàn sinh viên, giảng viên và phòng học bằng file Excel thủ công ngốn quá nhiều thời gian. Con người dò tìm chéo rất dễ bị lọt lỗi (ví dụ: 1 giảng viên bị xếp dạy 2 môn cùng 1 khung giờ ở 2 cơ sở khác nhau).
-🔄 Handoff (Điểm chuyển giao): Bước 1 (thông tin đi từ Giảng viên sang bộ phận Giáo vụ) và Bước 4 (Thông tin từ Giáo vụ đẩy lên cổng thông tin cho toàn trường).
-
 ---
 
 ## 3.2. Problem Statement (6-field) & Metrics (15 min)
