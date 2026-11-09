@@ -14,6 +14,11 @@ import os
 import sys
 from typing import Any
 
+from dotenv import load_dotenv
+
+# Load GEMINI_API_KEY from the repo-root .env (one level above starter-code/)
+load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".env"))
+
 # Standard Model Identifier
 GEMINI_MODEL = "gemini-2.5-flash"
 
