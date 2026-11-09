@@ -187,50 +187,59 @@ QUICK PROBLEM CARD #3
 
 ---
 
-# 🏗️ Phase 3 — DEEP-DIVE: XANH SM AIRPORT PICK-UP ASSISTANT
+# 🏗️ Phase 3 — DEEP-DIVE: VINFAST WORKSHOP SCHEDULING ASSISTANT
 
 ## 3.1. Current-State Workflow Mapping (25 min)
 
 **Quy trình hiện tại (As-Is):**
 
 ```text
-[1] Khách đặt xe Xanh SM tại sân bay
+[1] Tiếp nhận yêu cầu sửa chữa và thông tin phương tiện
               |
-              | 🔄 Handoff: Ứng dụng chuyển thông tin chuyến đi
+              | 🔄 Handoff: Khách → Service Advisor
               v
-[2] Khách tìm khu vực đón Xanh SM
+[2] Service Advisor kiểm tra lỗi,
+    xác định loại công việc và mức độ ưu tiên
               |
-              | 🔴 BOTTLENECK (5–7 phút)
-              | Khó xác định đúng khu vực đón,
-              | nhầm lẫn giữa các hãng vận tải
+              | 🔄 Handoff: Service Advisor → Workshop Manager
               v
-[3] Khách liên hệ tài xế nếu không tìm được
+[3] Workshop Manager kiểm tra lịch làm việc, chuyên môn
+    kỹ thuật viên và khu vực sửa chữa còn trống
               |
-              | 🔴 BOTTLENECK (phát sinh 2–3 phút)
-              | Hai bên phải trao đổi để xác nhận vị trí
+              | 🔴 BOTTLENECK (5–10 phút)
+              | Đối chiếu thủ công nhiều nguồn: lịch KTV, chuyên môn,
+              | thời gian sửa dự kiến, công suất xưởng
               v
-[4] Khách gặp tài xế và lên xe
+[4] Phân công kỹ thuật viên, vị trí và thời gian sửa chữa
               |
+              | 🔴 BOTTLENECK (5–10 phút)
+              | Dễ trùng lịch, phân công sai chuyên môn
+              | 🔄 Handoff: Manager → Technician / Khách
+              v
+[5] Cập nhật lịch khi có thay đổi hoặc việc mới phát sinh
+              |
+              | 🔴 Phải xếp lại thủ công khi có xe khẩn cấp
               v
           [HOÀN THÀNH]
 ```
 
 **Các điểm Handoff (🔄):**
-- Hành khách → Ứng dụng Xanh SM: Gửi yêu cầu đặt xe và thông tin điểm đón.
-- Ứng dụng Xanh SM → Tài xế: Chuyển thông tin chuyến đi.
-- Hành khách ↔ Tài xế: Gọi điện hoặc nhắn tin để xác nhận vị trí khi không tìm được điểm đón.
+- Khách hàng → Service Advisor: Cung cấp thông tin xe và mô tả lỗi.
+- Service Advisor → Workshop Manager: Chuyển loại công việc và mức độ ưu tiên.
+- Workshop Manager → Technician / Khách hàng: Thông báo lịch, vị trí và thời gian sửa chữa.
 
 **Thời gian vận hành trung bình (ước tính):**
 
 | Bước | Công việc | Thời gian |
 |---|---|---:|
-| 1 | Đặt xe | 1–2 phút |
-| 2 | Tìm khu vực đón | 5–7 phút |
-| 3 | Liên hệ tài xế (nếu cần) | 2–3 phút |
-| 4 | Gặp tài xế và lên xe | 1–2 phút |
-| **Tổng cộng** | | **9–14 phút/lượt** |
+| 1 | Tiếp nhận yêu cầu | 3–5 phút |
+| 2 | Kiểm tra lỗi, xác định loại việc và ưu tiên | 5–10 phút |
+| 3 | Kiểm tra nguồn lực (KTV, khu vực) | 5–10 phút |
+| 4 | Phân công và lập lịch | 5–10 phút |
+| 5 | Cập nhật lịch khi thay đổi | 5–15 phút/lần |
+| **Lập lịch (bước 3–4)** | | **10–20 phút/yêu cầu** |
 
-*Lưu ý: Bước 3 chỉ phát sinh khi hành khách không tìm được khu vực đón. Các thời gian trên là giả định ban đầu, cần khảo sát thực tế để xác nhận.*
+*Lưu ý: Các thời gian trên là giả định ban đầu, cần khảo sát thực tế tại xưởng để xác nhận.*
 
 ---
 
@@ -238,27 +247,27 @@ QUICK PROBLEM CARD #3
 
 | Field | Nội dung chi tiết |
 |---|---|
-| **1. Actor / Operator** | Hành khách đặt xe Xanh SM tại sân bay và tài xế Xanh SM. Hành khách tìm khu vực đón; tài xế hỗ trợ xác nhận và hướng dẫn khi hai bên không tìm thấy nhau. |
-| **2. Current Workflow** | Khách đặt xe trên ứng dụng Xanh SM → tìm khu vực đón theo biển chỉ dẫn → liên hệ tài xế nếu không xác định được vị trí → gặp tài xế và lên xe. Công cụ sử dụng gồm ứng dụng đặt xe, bản đồ và điện thoại/tin nhắn. |
-| **3. Bottleneck** | Bước 2–3: Tìm khu vực đón và liên hệ tài xế. Hành khách khó phân biệt khu vực đón của các hãng vận tải, thiếu hướng dẫn trực quan và phải liên hệ tài xế để xác nhận vị trí. |
-| **4. Business Impact** | Giả sử có 500 chuyến/ngày, mỗi chuyến tiết kiệm 3–4 phút, tổng thời gian tiết kiệm khoảng 25–33,3 giờ/ngày. Với chi phí thời gian giả định 60.000 VNĐ/giờ, giá trị thời gian tương đương 1,5–2 triệu VNĐ/ngày. Ngoài ra, giảm thời gian tài xế chờ, số cuộc gọi hỗ trợ và nguy cơ hủy chuyến do không gặp được nhau. |
-| **5. Success Metric** | (1) Giảm thời gian tìm điểm đón từ 5–7 phút xuống 2–3 phút/lượt, tương đương giảm 57–71%. (2) Giảm ≥ 50% số cuộc gọi giữa hành khách và tài xế liên quan đến tìm điểm đón. (3) ≥ 90% hành khách xác định đúng khu vực đón ngay lần đầu. |
-| **6. Operational Boundary** | AI được phép tra cứu điểm đón chính thức, giải thích đường đi, hiển thị bản đồ và hướng dẫn hành khách dựa trên dữ liệu đã xác minh. AI tuyệt đối không được tự tạo tọa độ, khẳng định vị trí chưa xác minh, tự ý thay đổi điểm đón hoặc hủy chuyến. Khi thiếu dữ liệu hoặc không đủ độ tin cậy, AI phải chuyển sang hướng dẫn chính thức hoặc đề xuất liên hệ tài xế/nhân viên hỗ trợ. |
+| **1. Actor / Operator** | Quản lý nhà xưởng (Workshop Manager) là người lập và duyệt lịch. Service Advisor cung cấp thông tin lỗi, Technician thực hiện sửa chữa, khách hàng chờ xe. |
+| **2. Current Workflow** | Tiếp nhận yêu cầu → Service Advisor xác định loại việc và ưu tiên → Manager đối chiếu lịch KTV, chuyên môn, khu vực trống → phân công KTV, vị trí, thời gian → cập nhật khi có thay đổi. Công cụ: bảng tính/sổ lịch, điện thoại, hệ thống quản lý dịch vụ. |
+| **3. Bottleneck** | Bước 3–4: Kiểm tra nguồn lực và lập lịch. Manager phải đối chiếu thủ công lịch làm việc, chuyên môn KTV, thời gian sửa dự kiến và công suất xưởng, dễ dẫn đến trùng lịch hoặc phân công không phù hợp; xếp lại lịch khi có việc khẩn cấp rất tốn công. |
+| **4. Business Impact** | Giả sử xưởng nhận 60 yêu cầu/ngày, mỗi yêu cầu tiết kiệm 8–15 phút lập lịch → tiết kiệm 8–15 giờ công/ngày. Với chi phí giả định 100.000 VNĐ/giờ, tương đương 0,8–1,5 triệu VNĐ/ngày/xưởng. Ngoài ra giảm thời gian chờ của xe, giảm trùng lịch/phân công sai và tăng mức sử dụng khu vực sửa chữa, nâng cao trải nghiệm khách hàng. |
+| **5. Success Metric** | (1) Giảm thời gian lập lịch từ 10–20 phút xuống < 3 phút/yêu cầu. (2) Giảm ≥ 30% trường hợp trùng lịch hoặc phân công không phù hợp. (3) Giảm 20% thời gian chờ trung bình trước khi sửa. (4) ≥ 90% đề xuất đáp ứng ràng buộc chuyên môn và giờ làm việc. |
+| **6. Operational Boundary** | AI được phép phân tích yêu cầu, ước lượng thời gian, đề xuất KTV/khung giờ/khu vực và đề xuất điều chỉnh lịch. AI không được tự ý xác nhận lịch, phân công KTV không đủ chuyên môn/vượt giờ làm việc, bỏ qua ràng buộc an toàn, tự hạ mức ưu tiên hoặc tự thông báo lịch cho khách khi chưa được Manager duyệt. Khi dữ liệu thiếu hoặc không có phương án khả thi, hệ thống phải chuyển Manager xử lý thủ công. |
 
 ### Success Metrics theo 4 nhóm
 
 | Nhóm | Metric | Target |
 |---|---|---:|
-| **Feasibility** | Tỷ lệ sân bay trong phạm vi MVP có dữ liệu điểm đón được xác minh | ≥ 80% |
-| | Tỷ lệ yêu cầu có đủ thông tin để đưa ra hướng dẫn | ≥ 95% |
-| **Financial Impact** | Giá trị thời gian tiết kiệm với giả định 500 chuyến/ngày | 1,5–2 triệu VNĐ/ngày |
-| | Giảm chi phí hỗ trợ liên quan đến tìm điểm đón | ≥ 30% |
-| **Operational Efficiency** | Tỷ lệ hành khách xác định đúng điểm đón ngay lần đầu | ≥ 90% |
-| | Giảm số cuộc gọi giữa tài xế và hành khách để tìm điểm đón | ≥ 50% |
-| **Time Reduction** | Thời gian tìm điểm đón | Từ 5–7 phút xuống 2–3 phút |
-| | Tỷ lệ cắt giảm thời gian | **57–71%** |
+| **Feasibility** | Tỷ lệ yêu cầu có đủ dữ liệu (loại lỗi, ưu tiên, lịch KTV, khu vực) để lập lịch | ≥ 90% |
+| | Tỷ lệ đề xuất đáp ứng ràng buộc chuyên môn và giờ làm việc | ≥ 90% |
+| **Financial Impact** | Giá trị công lập lịch tiết kiệm với giả định 60 yêu cầu/ngày | 0,8–1,5 triệu VNĐ/ngày/xưởng |
+| | Giảm chi phí do trùng lịch/phân công sai (làm lại, xe nằm chờ) | ≥ 30% |
+| **Operational Efficiency** | Giảm số trường hợp trùng lịch hoặc phân công không phù hợp | ≥ 30% |
+| | Giảm thời gian chờ trung bình của xe trước khi sửa | ≥ 20% |
+| **Time Reduction** | Thời gian lập lịch | Từ 10–20 phút xuống < 3 phút |
+| | Tỷ lệ cắt giảm thời gian | **≥ 70–85%** |
 
-*Các con số là mục tiêu đề xuất để kiểm chứng, không phải kết quả vận hành thực tế của Xanh SM. Giá trị thời gian tiết kiệm chưa đồng nghĩa với lợi nhuận thực tế.*
+*Các con số là mục tiêu đề xuất để kiểm chứng, không phải kết quả vận hành thực tế của VinFast. Giá trị thời gian tiết kiệm chưa đồng nghĩa với lợi nhuận thực tế.*
 
 ---
 
@@ -268,49 +277,57 @@ QUICK PROBLEM CARD #3
 
 **Lựa chọn:**
 - [x] Rule / State-Machine
+- [x] Optimization (bổ sung cho bài toán lập lịch)
 - [x] LLM Feature
 - [ ] Agentic Loop
 
 **Giải thích:**
 
-- **Rule / State-Machine:** Tra cứu điểm đón chính thức dựa trên sân bay, nhà ga, khu vực và thông tin chuyến đi. Dữ liệu vị trí được quản lý trong database.
-- **LLM Feature:** Hiểu câu hỏi tự nhiên của hành khách, giải thích hướng dẫn và trả lời các câu hỏi như: "Tôi đang ở cửa ra số 3, phải đi đâu để gặp tài xế?".
-- **Agentic Loop:** Chưa cần thiết trong MVP vì hệ thống chủ yếu tra cứu và hướng dẫn, không cần tự chủ thực hiện chuỗi hành động phức tạp.
+- **Rule / State-Machine:** Kiểm tra ràng buộc cứng: chuyên môn KTV, giờ làm việc, khu vực/thiết bị phù hợp, quy tắc ưu tiên và an toàn, không trùng lịch.
+- **Optimization:** Bộ giải lập lịch (constraint solver) chọn KTV, khung giờ, khu vực tối ưu theo ưu tiên, thời gian chờ và công suất xưởng; tính lại nhanh khi có xe khẩn cấp.
+- **LLM Feature:** Đọc mô tả lỗi tự do, trích xuất loại công việc và chuyên môn cần thiết, ước lượng thời gian sửa dựa trên các ca tương tự, giải thích lý do đề xuất bằng ngôn ngữ tự nhiên cho Manager.
+- **Agentic Loop:** Chưa cần trong MVP vì hệ thống chỉ đề xuất, Manager duyệt; chưa cần tự chủ thực hiện chuỗi hành động.
 
-**Đề xuất:** Kết hợp Rule + LLM Feature. Rule đảm bảo tính chính xác của dữ liệu điểm đón; LLM giúp giao tiếp tự nhiên và cá nhân hóa hướng dẫn.
+**Đề xuất:** Kết hợp Rule + Optimization + LLM + Human-in-the-loop. LLM chỉ hiểu và giải thích; Rule và Optimization quyết định tính hợp lệ và tối ưu của lịch; Manager là người duyệt cuối.
 
 ### B. Future-State Flow (To-Be)
 
 ```text
-[1] Khách đặt xe Xanh SM tại sân bay
+[1] Tiếp nhận yêu cầu sửa chữa và thông tin phương tiện
               |
               v
-[2] Backend nhận thông tin chuyến đi,
-    sân bay, nhà ga và điểm đón
+[2] 🔵 LLM FEATURE
+    Phân tích mô tả lỗi → loại công việc, chuyên môn cần thiết,
+    ước lượng thời gian sửa (kèm độ tin cậy)
               |
               v
-[3] 🔵 RULE ENGINE
-    Tra cứu database điểm đón chính thức
-    theo sân bay và nhà ga
+[3] 🟢 HUMAN STEP (Service Advisor)
+    Xác nhận loại việc và mức độ ưu tiên
               |
               v
-[4] 🔵 LLM FEATURE
-    Phân tích câu hỏi và thông tin vị trí
-    do hành khách cung cấp
-    Tạo hướng dẫn dựa trên dữ liệu đã xác minh
+[4] 🔵 RULE ENGINE
+    Lọc KTV đủ chuyên môn, đang trong giờ làm,
+    khu vực sửa chữa còn trống
               |
               v
-[5] 🔵 SYSTEM
-    Hiển thị bản đồ, vị trí đón,
-    biển chỉ dẫn và đường đi bộ
+[5] 🔵 OPTIMIZATION
+    Tìm phương án KTV + khung giờ + khu vực tối ưu
+    (giảm thời gian chờ, tránh trùng lịch)
               |
               v
-[6] 🟢 HUMAN STEP (HITL)
-    Hành khách xác nhận đã tìm được
-    đúng khu vực đón
+[6] 🔵 LLM FEATURE
+    Giải thích đề xuất và các phương án thay thế
               |
               v
-[7] Gặp tài xế và lên xe
+[7] 🟢 HUMAN STEP (HITL – Workshop Manager)
+    Xem, chỉnh sửa, duyệt hoặc từ chối lịch
+              |
+              v
+[8] Thông báo Technician và khách hàng
+              |
+              v
+[9] Có việc khẩn cấp / thay đổi → quay lại bước 4–5
+    để đề xuất điều chỉnh lịch, Manager duyệt lại
               |
               v
           [HOÀN THÀNH]
@@ -318,23 +335,22 @@ QUICK PROBLEM CARD #3
 
 **Fallback (↩️):**
 
-Nếu LLM không hiểu câu hỏi, thiếu thông tin hoặc không đủ độ tin cậy:
+Nếu LLM không hiểu mô tả lỗi, độ tin cậy thấp hoặc solver không tìm được phương án khả thi:
 
-1. Không tự tạo hoặc suy đoán vị trí đón.
-2. Hiển thị hướng dẫn và bản đồ điểm đón chính thức đã được xác minh.
-3. Đề nghị hành khách chọn lại nhà ga hoặc cung cấp vị trí hiện tại.
-4. Cung cấp tùy chọn gọi điện/nhắn tin cho tài xế.
-5. Nếu vẫn không giải quyết được, chuyển sang nhân viên hỗ trợ.
+1. Không tự suy đoán loại công việc hoặc nới lỏng ràng buộc cứng.
+2. Chuyển Service Advisor xác nhận hoặc nhập thủ công loại việc và ưu tiên.
+3. Hiển thị các xung đột (thiếu KTV chuyên môn, hết khu vực trống) và gợi ý phương án gần nhất (dời khung giờ, mượn KTV ca khác).
+4. Manager lập lịch thủ công nếu vẫn không giải quyết được.
 
 ### C. Operational Boundaries
 
 | AI được phép làm | AI tuyệt đối không được làm |
 |---|---|
-| Tra cứu điểm đón chính thức | Tự tạo tọa độ hoặc điểm đón không tồn tại |
-| Giải thích đường đi bộ | Hướng dẫn khách đi vào khu vực hạn chế |
-| Trả lời câu hỏi về nhà ga và biển chỉ dẫn | Khẳng định vị trí chưa xác minh là chính xác |
-| Gợi ý liên hệ tài xế | Tự ý thay đổi điểm đón hoặc hủy chuyến |
-| Hỗ trợ nhiều ngôn ngữ | Chia sẻ thông tin chuyến đi cho người không có quyền truy cập |
+| Phân loại công việc và ước lượng thời gian sửa | Tự xác nhận lịch khi chưa có Manager duyệt |
+| Đề xuất KTV, khung giờ, khu vực phù hợp | Phân công KTV không đủ chuyên môn hoặc ngoài giờ làm việc |
+| Đề xuất điều chỉnh lịch khi có xe khẩn cấp | Tự ý hoãn/hủy lịch xe khác hoặc thay đổi mức ưu tiên |
+| Giải thích lý do và phương án thay thế | Bỏ qua ràng buộc an toàn hoặc ước lượng thời gian không có căn cứ |
+| Cảnh báo xung đột lịch | Chia sẻ thông tin khách hàng/phương tiện cho người không có quyền |
 
 ---
 
@@ -343,14 +359,15 @@ Nếu LLM không hiểu câu hỏi, thiếu thông tin hoặc không đủ độ
 **Quyết định: GO – Tiếp tục xây dựng Prototype ở Phase 4.**
 
 **Lý do:**
-1. Pain point rõ ràng, tập trung vào việc tìm khu vực đón xe tại sân bay.
-2. Có thể đo lường trực tiếp hiệu quả qua thời gian tìm điểm đón và số cuộc gọi giữa hành khách với tài xế.
-3. Có thể triển khai MVP bằng Rule + LLM Feature, không cần Agentic AI phức tạp.
-4. Có thể thử nghiệm tại một sân bay trước khi mở rộng.
+1. Pain point rõ ràng, tập trung ở bước kiểm tra nguồn lực và lập lịch của Workshop Manager.
+2. Đo lường trực tiếp được qua thời gian lập lịch, số lần trùng lịch và thời gian chờ của xe.
+3. Phần lớn là ràng buộc rõ ràng nên Rule + Optimization xử lý chính xác; LLM chỉ hỗ trợ hiểu lỗi và giải thích, rủi ro được kiểm soát bằng HITL.
+4. Có thể thử nghiệm tại một xưởng trước khi mở rộng.
 
 **Giả thuyết cần kiểm chứng ở Phase 4:**
 
-Nếu cung cấp hướng dẫn điểm đón cá nhân hóa dựa trên sân bay, nhà ga và vị trí hành khách, hệ thống có thể giảm ít nhất 50% thời gian tìm điểm đón và giảm ít nhất 50% số cuộc gọi hỗ trợ giữa hành khách và tài xế.
+Nếu LLM trích xuất đúng loại công việc và chuyên môn từ mô tả lỗi, kết hợp Rule + Optimization đề xuất lịch, hệ thống có thể giảm thời gian lập lịch xuống dưới 3 phút/yêu cầu và đạt ≥ 90% đề xuất thỏa mãn ràng buộc chuyên môn và giờ làm việc.
+
 
 # 💻 Phase 4 — TECHNICAL PROMPT PROTOTYPE (Nhóm, 30 min)
 
