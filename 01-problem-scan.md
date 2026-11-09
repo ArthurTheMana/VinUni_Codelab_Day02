@@ -70,6 +70,7 @@ Bước 2–4: Xác định thông tin thiếu, hỏi lại và phân loại; d�
 
 **AI có thể nhảy vào hỗ trợ ở bước**: 
 Bước 2–4: Trích xuất tòa nhà, tầng, vị trí và hiện tượng; tách nhiều vấn đề; tạo câu hỏi bổ sung; đề xuất mức ưu tiên và bộ phận tiếp nhận theo quy tắc được cung cấp. Nhân viên duyệt trước khi chuyển yêu cầu.
+
 **Đo thành công bằng**: Mục tiêu giảm thời gian thao tác từ 10 xuống ≤ 4 phút/phản ánh, phân loại đúng bộ phận ≥ 90% trên bộ 30 phản ánh giả lập có đáp án chuẩn, nhận diện đủ các trường hợp khẩn trong bộ kiểm thử và chuyển người phụ trách.
 **Quick Architecture**:
 [ ] No AI  [x] Rule  [x] LLM  [ ] Agent
@@ -131,5 +132,5 @@ Bước 2–4: Tách triệu chứng, trích xuất dữ liệu đã có, tạo 
 **Quick Architecture**:
 [ ] No AI  [x] Rule  [x] LLM  [ ] Agent
 LLM đọc hiểu mô tả và soạn câu hỏi/phiếu; Rule kiểm tra các trường bắt buộc trước khi nhân viên duyệt.
----
+
 
