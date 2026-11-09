@@ -1,3 +1,50 @@
+# Lab 02 — Worksheet: AI Product Scoping (Vin Smart Future)
+
+---
+
+## 🏛️ 1. Bối cảnh thực tế: Vin Smart Future (Vingroup)
+
+**Vingroup** — Tập đoàn tư nhân lớn nhất Việt Nam — vừa sáp nhập toàn bộ các phòng ban công nghệ thuộc các công ty thành viên thành một đơn vị công nghệ thống nhất mang tên **Vin Smart Future**. 
+
+Nhiệm vụ của **Vin Smart Future** là xây dựng các giải pháp AI, số hóa, và tự động hóa cốt lõi để nâng cao hiệu suất vận hành và trải nghiệm khách hàng xuyên suốt các công ty thành viên:
+* 🚗 **VinFast:** Hệ thống xe điện thông minh (EV), trợ lý AI ảo trong xe, dự đoán bảo trì pin, và quản lý chuỗi cung ứng sản xuất.
+* 🚕 **Xanh SM (GSM):** Vận hành đội xe taxi/xe máy điện thông minh, điều vận thông minh (Smart Dispatching), tối ưu hóa lộ trình di chuyển.
+* 🏢 **Vinhomes:** Quản lý đô thị thông minh (Smart Cities), trợ lý cư dân thông minh, tối ưu hóa mức tiêu thụ năng lượng.
+* 🏥 **Vinmec:** Y tế thông minh, chẩn đoán hình ảnh bằng AI, tối ưu hóa quản lý hồ sơ bệnh án.
+* 🎢 **Vinpearl / VinWonders:** Trải nghiệm du lịch số hóa, quản lý phòng và luồng khách thông minh tại các khu vui chơi.
+
+Trong buổi Lab hôm nay, nhóm của bạn sẽ đóng vai trò là **AI Product Engineer** tại **Vin Smart Future**, tiến hành tìm kiếm, scoping, phân tích độ khả thi, thiết lập ranh giới vận hành, và xây dựng một **bản mẫu kỹ thuật (prompt prototype)** cho một bài toán cụ thể thuộc một trong những mảng kinh doanh trên.
+
+---
+
+## 📊 2. Cơ cấu tính điểm bài lab
+
+### 👥 Điểm nhóm (60 điểm)
+
+| Gate | Điểm | Deliverable | Tiêu chí chấm |
+|---|---:|---|---|
+| **G1. Workflow Mapping** | 20 | Problem Deep-Dive | Vẽ chi tiết quy trình hiện tại: các bước, handoff, thời gian, bottleneck |
+| **G2. Problem Statement** | 20 | Problem Deep-Dive | Problem Statement 6-field bám sát thực tế, metric có số và ranh giới rõ ràng |
+| **G3. AI Fit & Future Flow** | 10 | Problem Deep-Dive | So sánh Rule vs LLM vs Agent, future flow có bước AI, ranh giới và Fallback |
+| **G4. Decision Quality** | 10 | Problem Deep-Dive | Quyết định Go/Not Yet/No-Go trung thực và có chứng cứ rõ ràng |
+
+### 👤 Điểm cá nhân (40 điểm)
+
+| Gate | Điểm | Deliverable | Tiêu chí chấm |
+|---|---:|---|---|
+| **I1. Scan & Cards** | 15 | Quick Cards | Liệt kê 5 problems sử dụng 3 lenses, hoàn thiện 3 quick cards chất lượng |
+| **I2. Prototyping** | 10 | 02-lab/ | Chạy thử nghiệm programmatic prompt prototype thành công |
+| **I3. AI Log & Reflection** | 15 | 03-ai-log.md | Phản ánh trung thực về việc dùng AI làm thought-partner (giúp gì, sai gì, sửa gì) |
+
+---
+
+# 🚀 Phase 0 — worked Example: Xanh SM Intelligent Dispatcher (15 min)
+
+*Giảng viên walk-through ví dụ thực tế từ Vin Smart Future để bạn hiểu rõ cách scoping một bài toán AI.*
+Đọc chi tiết worked example tại file [02-deliverable-example.md](02-deliverable-example.md).
+
+---
+
 # 🔍 Phase 1 — SCAN (Cá nhân, 20 min)
 
 Hãy sử dụng **4 Lenses** dưới đây để quét qua hoạt động vận hành của các công ty thành viên Vingroup. Ghi lại **ít nhất 5 bài toán/bottleneck** thực tế.
@@ -8,14 +55,19 @@ Hãy sử dụng **4 Lenses** dưới đây để quét qua hoạt động vận
 3. **AI có thể tốt hơn (AI-upgrade):** Dịch vụ khách hàng hiện tại còn chậm hoặc phản hồi rập khuôn. (Ví dụ: Chatbot CSKH Vinpearl hỗ trợ đặt vé vui chơi).
 4. **Pain từ người khác (Stakeholder Pain):** Bottleneck khiến khách hàng hoặc nhân viên thực địa phàn nàn. (Ví dụ: Tài xế Xanh SM phàn nàn về việc hệ thống gợi ý điểm đón khách không chính xác).
 
+> [!TIP]
+> **🤖 AI Prompts — Partner brainstorm:**
+> Hãy sử dụng prompt sau để brainstorm các bài toán thực tế nếu bạn chưa có ý tưởng:
+> *"Tôi là AI Engineer tại Vin Smart Future (Vingroup). Tôi đang tìm kiếm các pain point vận hành cụ thể có thể tối ưu bằng AI cho mảng [Chọn một: VinFast / Xanh SM / Vinhomes / Vinmec]. Hãy gợi ý cho tôi 5 quy trình nghiệp vụ thủ công, tốn nhiều thời gian và gây rò rỉ hiệu suất kèm con số thống kê ước tính về tổn thất."*
+
 ### 📝 List bài toán của tôi:
 | # | Subsidiary (VinFast/Xanh SM...) | Lens | Mô tả ngắn bài toán |
 |---|----------------------------------|------|---------------------|
-| 1 | Xanh SM | Pain từ người khác | Khách hàng đặt xe Xanh SM tại sân bay có thể gặp khó khăn khi xác định đúng khu vực đón khách (Pickup Point) do mỗi hãng taxi hoặc dịch vụ gọi xe có vị trí đón riêng. Điều này có thể gây nhầm lẫn, khiến khách phải đi tìm xe, liên hệ tài xế nhiều lần và kéo dài thời gian đón khách. (Nguyễn Tài Minh Huy) |
-| 2 | VinFast | AI-upgrade, Stakeholder pain | Lập lịch cho người sửa chữa phương tiện. (Trần Thành Vinh)|
-| 3 | Vinhomes | Tốn thời gian | Phân loại thủ công và điều phối Ticket báo cáo sự cố (điện, nước) của cư dân cho đội kỹ thuật. |
-| 4 | Vinhomes | Repetitive, Time-consuming | Các nhân viên bảo hành các tòa vinhomes thường xuyên nhận được các phản ánh sửa chữa từ cư dân như: đèn hỏng, thang máy, đường nước,.... nhưng thông tin nhận được đôi lúc bị thiếu như tòa nhà, tầng, chi tiết hỏng hóc cần sửa chữa. (Hoàng Dương Anh Quân)|
-| 5 | VinPearl | Tốn thời gian | Việc trích xuất thông tin đặt phòng theo đoàn từ email không theo mẫu thống nhất có thể khiến nhân viên Vinpearl mất nhiều thời gian nhập liệu và kiểm tra thông tin. (Nguyễn Văn Hùng)|
+| 1 | Xanh SM | Pain từ người khác | Khách hàng đặt xe Xanh SM tại sân bay có thể gặp khó khăn khi xác định đúng khu vực đón khách (Pickup Point) do mỗi hãng taxi hoặc dịch vụ gọi xe có vị trí đón riêng. Điều này có thể gây nhầm lẫn, khiến khách phải đi tìm xe, liên hệ tài xế nhiều lần và kéo dài thời gian đón khách. |
+| 2 | Xanh SM | Tốn thời gian | Một đội Xanh SM có nhiều xe chuẩn bị hoạt động vào giờ cao điểm buổi sáng. Một số xe còn 20–30% pin, một số xe đang sạc trong khi số lượng trụ sạc khả dụng có giới hạn. Người điều phối phải cân nhắc xe nào nên tiếp tục nhận khách, xe nào cần sạc trước và khi nào xe có thể quay lại hoạt động. |
+| 3 | Xanh SM | Lặp lại | Sau mỗi chuyến, khách hàng có thể đánh giá tài xế bằng số sao và nhận xét. Nhân viên phải đọc nhiều phản hồi để phân loại vấn đề về thái độ phục vụ, vệ sinh xe hoặc trải nghiệm chuyến đi. |
+| 4 | Vinhomes | AI có thể tốt hơn | Một cư dân mới muốn đăng ký thẻ xe, nhưng không rõ cần chuẩn bị giấy tờ nào hoặc thực hiện ở đâu. Trợ lý AI có thể hỏi tên khu đô thị và loại phương tiện, sau đó hướng dẫn quy trình dựa trên các quy định đang có hiệu lực. |
+| 5 | Vinmec | Pain từ người khác | Một bệnh nhân muốn đặt lịch khám nhưng không biết nên chọn chuyên khoa nào. Người bệnh phải liên hệ nhân viên để được hướng dẫn hoặc có thể đặt lịch không phù hợp. |
 
 ---
 
@@ -25,7 +77,7 @@ Chọn **top 3 bài toán** từ danh sách trên và hoàn thiện **3 Quick Pr
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ QUICK PROBLEM CARD #1 (Minh Huy)                            │
+│ QUICK PROBLEM CARD #1                                       │
 │                                                             │
 │ Bài toán (1 câu): Khách hàng đặt Xanh SM tại sân bay có thể |
 | mất thời gian tìm đúng khu vực đón xe do mỗi hãng taxi hoặc |
@@ -59,88 +111,79 @@ Chọn **top 3 bài toán** từ danh sách trên và hoàn thiện **3 Quick Pr
 └─────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────┐
-│ QUICK PROBLEM CARD #2 (Trần Thành Vinh)                     │
+│ QUICK PROBLEM CARD #2                                       │
 │                                                             │
-│ Bài toán (1 câu):                                           │
-│ Ứng dụng AI hỗ trợ tự động lập lịch sửa chữa phương tiện,   │
-│ tối ưu phân công kỹ thuật viên, thời gian và vị trí sửa     │
-│ chữa dựa trên loại lỗi, mức độ ưu tiên và nguồn lực xưởng.  │
-│                                                             │
-│ Công ty thành viên:                                         │
-│ [x] VinFast [ ] Xanh SM [ ] Vinhomes                        │
-│ [ ] Vinmec [ ] Khác                                         │
-│                                                             │
-│ Ai đang đau (Actor)?                                        │
-│ Workshop Manager, Service Advisor, Technician và khách      │
-│ hàng. Đặc biệt là Workshop Manager chịu áp lực trong việc   │
-│ kiểm tra nguồn lực và phân công lịch sửa chữa.              │
-│                                                             │
-│ Workflow thủ công hiện tại (3-5 bước):                      │
-│ 1. Tiếp nhận yêu cầu sửa chữa và thông tin phương tiện.     │
-│ ──> 2. Kiểm tra lỗi, xác định loại công việc và mức độ      │
-│ ưu tiên.                                                    │
-│ ──> 3. Kiểm tra lịch làm việc, chuyên môn kỹ thuật viên     │
-│ và công suất khu vực sửa chữa.                              │
-│ ──> 4. Phân công kỹ thuật viên, vị trí và thời gian         │
-│ sửa chữa.                                                   │
-│ ──> 5. Cập nhật, điều chỉnh lịch khi có phát sinh.          │
-│                                                             │
-│ Bước nào tốn thời gian/lỗi nhất?                            │
-│ Bước 3 và 4 – Kiểm tra nguồn lực và lập lịch phân công.     │
-│ ⏱ Ước tính 10–20 phút/yêu cầu sửa chữa.                    │
-│                                                             │
-│ AI có thể nhảy vào hỗ trợ ở bước nào?                       │
-│ - Phân tích yêu cầu, xác định loại lỗi và chuyên môn cần có.│
-│ - Dự đoán thời gian sửa chữa từ dữ liệu lịch sử.            │
-│ - Đề xuất kỹ thuật viên phù hợp với chuyên môn và lịch làm. │
-│ - Tối ưu khung giờ, vị trí sửa chữa theo công suất xưởng.   │
-│ - Đề xuất điều chỉnh lịch khi có công việc khẩn cấp.        │
-│                                                             │
-│ Đo thành công bằng gì (Metric có số)?                       │
-│ - Giảm thời gian lập lịch từ 10–20 phút xuống dưới 3 phút/  │
-│ yêu cầu.                                                    │
-│ - Giảm ít nhất 30% trường hợp trùng lịch hoặc phân công     │
-│ không phù hợp.                                              │
-│ - Giảm 20% thời gian chờ trung bình của phương tiện.        │ 
-│ - ≥ 90% đề xuất lịch đáp ứng ràng buộc chuyên môn và        │
-│ thời gian làm việc.                                         │
-│                                                             │
-│ Quick Architecture:                                         │
-│ [ ] No AI [x] Rule [ ] LLM [x] Agent                        │
-│ Bổ sung: Optimization + Human-in-the-loop.                  │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│ QUICK PROBLEM CARD #3 (Lê Chuẩn)                            │
-│                                                             │
-│ Bài toán (1 câu): Phân loại và điều phối thủ công các ticket│
-│ báo cáo sự cố của cư dân trên App Vinhomes gây chậm trễ.    │
-│                                                             │
-│ Công ty thành viên: [ ] VinFast  [ ] Xanh SM  [x] Vinhomes  │
+│ Bài toán (1 câu): Sau mỗi chuyến, khách hàng có thể đánh giá| 
+| tài xế bằng số sao và nhận xét và nhân viên phải đọc nhiều  |
+| phản hồi để phân loại vấn đề về thái độ phục vụ, vệ sinh xe |
+| hoặc trải nghiệm chuyến đi.                                 │
+│ Công ty thành viên: [ ] VinFast  [x] Xanh SM  [ ] Vinhomes  │
 │                     [ ] Vinmec   [ ] Khác (Ghi rõ)________  │
 │                                                             │
-│ Ai đang đau (Actor)? Admin/Ban quản lý (quá tải giờ cao     │
-│ điểm) và Cư dân (bức xúc vì phải chờ đợi lâu).              │
+│ Ai đang đau (Actor)? Nhân viên chăm sóc khách hàng và nhân  |
+| viên quản lý chất lượng dịch vụ.                            │
 │                                                             │
-│ Workflow thủ công hiện tại (4 bước):                        │
-│   1. Cư dân tạo ticket (text/ảnh) ──> 2. Admin đọc hiểu &   │
-│   xem ảnh để xác định loại lỗi ──> 3. Đánh giá mức độ khẩn  │
-│   cấp ──> 4. Assign cho đội kỹ thuật phù hợp & báo cư dân.  │
+│ Workflow thủ công hiện tại (3-5 bước):                      │
+│     1. Khách hàng gửi đánh giá sau chuyến đi.               |
+| ──> 2. Nhân viên đọc và phân loại phản hồi.                 |
+| ──> 3. Chuyển các vấn đề đến bộ phận liên quan.             |
+| ──> 4.Tổng hợp kết quả và lập báo cáo.                      │
 │                                                             │
-│ Bước nào tốn thời gian/lỗi nhất? Bước 2 & 3 (⏱ 5-7 phút/lượt)│
-│                                                             │
-│ AI có thể nhảy vào hỗ trợ ở bước nào? Bước 2 & 3 (AI tự     │
-│ động phân tích text/ảnh của cư dân, gắn tag loại sự cố, mức │
-│ độ ưu tiên và đề xuất luôn đội kỹ thuật xử lý).             │
+│ Bước nào tốn thời gian/lỗi nhất? Bước 2 (⏱ 5-6 phút/lượt)   │
+│ AI có thể nhảy vào hỗ trợ ở bước nào? AI đọc và phân loại   |
+| phản hồi thành các nhóm như thái độ tài xế, vệ sinh xe, chất| 
+| lượng chuyến đi và đề xuất mức độ ưu tiên. Nhân viên kiểm   |
+| tra các trường hợp cần xử lý.                               │
 │                                                             │
 │ Đo thành công bằng gì (Metric có số)?                       │
-│ 1. Efficiency: Giảm thời gian xử lý & điều phối từ 5-7 phút │
-│ ──> dưới 30 giây/lượt (Đo bằng: Thời gian chênh lệch từ lúc │
-│ user tạo ticket đến lúc trạng thái đổi thành "Assigned").   │
-│ 2. Quality: Tỷ lệ phân loại đúng đội kỹ thuật đạt > 95% (Đo │
-│ bằng: Tỷ lệ ticket KHÔNG bị thợ kỹ thuật reject/chuyển trả  │
-│ lại trên phần mềm quản lý).                                 │
+│   Mục tiêu giảm thời gian phân loại từ 5-6 phút xuống 2     |
+| phút/phản hồi (giảm 66,7%). Nếu xử lý 500 phản hồi/ngày, có |
+| thể tiết kiệm khoảng 16,7 giờ công/ngày, tương đương 1 triệu |
+| VNĐ/ngày theo giả định 60.000 VNĐ/giờ.                      │
 │                                                             │
 │ Quick Architecture: [ ] No AI  [ ] Rule  [x] LLM  [ ] Agent │
 └─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│ QUICK PROBLEM CARD #3                                       │
+│                                                             │
+│ Bài toán (1 câu): Bác sĩ hoặc dược sĩ Vinmec phải kiểm tra  |
+| danh sách thuốc, tiền sử dị ứng và các tương tác thuốc có   |
+| thể xảy ra trước khi hoàn tất đơn thuốc, khiến quá trình tra| 
+| cứu và đối chiếu thông tin có thể tốn nhiều thời gian.      |
+│ Công ty thành viên: [ ] VinFast  [ ] Xanh SM  [ ] Vinhomes  │
+│                     [x] Vinmec   [ ] Khác (Ghi rõ)________  │
+│                                                             │
+│ Ai đang đau (Actor)? Cư dân mới cần đăng ký thẻ xe và nhân  |
+| viên chăm sóc cư dân thuộc ban quản lý Vinhomes.            │
+│                                                             │
+│ Workflow thủ công hiện tại (3-5 bước):                      │
+│     1. Bác sĩ xem hồ sơ và danh sách thuốc của bệnh nhân.   |
+| ──> 2. Kiểm tra dị ứng, tương tác và các cảnh báo về thuốc. |
+| ──> 3. Tra cứu tài liệu chuyên môn khi cần.                 |
+| ──> 4. Bác sĩ hoặc dược sĩ xác nhận đơn thuốc.              │
+│                                                             │
+│ Bước nào tốn thời gian/lỗi nhất? Bước 2-3 (⏱ 5-6 phút/lượt) │
+│ AI có thể nhảy vào hỗ trợ ở bước nào? AI hỗ trợ đọc ghi chú |
+| bệnh án, tổng hợp danh sách thuốc và giải thích các cảnh báo | 
+| từ cơ sở dữ liệu thuốc đã được kiểm chứng, giúp bác sĩ hoặc  |
+| dược sĩ kiểm tra nhanh hơn.                                 │
+│                                                             │
+│ Đo thành công bằng gì (Metric có số)? Mục tiêu thử nghiệm   |
+| giảm ít nhất 30% thời gian rà soát hồ sơ thuốc so với quy   |
+| trình hiện tại, đồng thời không bỏ sót cảnh báo quan trọng  |
+| trong bộ tình huống kiểm thử được chuyên gia y tế xác nhận. |
+| Cần đo thời gian và kiểm tra chất lượng thực tế trước khi   |
+| đánh giá hiệu quả.                                          │
+│                                                             │
+│                                                             │
+│ Quick Architecture: [ ] No AI  [x] Rule  [x] LLM  [ ] Agent │
+└─────────────────────────────────────────────────────────────┘
 ```
+
+> [!TIP]
+> **🤖 AI Prompts — Stress-Test thẻ bài toán:**
+> Hãy dán nội dung thẻ bài toán của bạn vào LLM để nhận phản biện:
+> *"Đây là một thẻ bài toán vận hành tôi đề xuất cho Vin Smart Future: [Dán nội dung]. Hãy đóng vai trò là một CFO và Trưởng phòng Vận hành cực kỳ khắt khe, chỉ ra cho tôi 3 điểm yếu về logic, metric, và giải thích vì sao rule-based code thông thường có thể giải quyết bài toán này tốt hơn là dùng AI."*
+
+---
